@@ -55,4 +55,6 @@ replace (
 // supply the go code.
 replace github.com/envoyproxy/data-plane-api => github.com/projectcalico/data-plane-api v0.0.0-20210121211707-a620ff3c8f7e
 
+replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
+
 replace github.com/projectcalico/libcalico-go => ../libcalico-go
