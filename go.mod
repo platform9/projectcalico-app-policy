@@ -9,7 +9,7 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/onsi/gomega v1.10.1
 	github.com/projectcalico/libcalico-go v1.7.2-0.20211119233600-e3f7c620522a
-	github.com/sirupsen/logrus v1.4.2
+	github.com/sirupsen/logrus v1.6.0
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
 	google.golang.org/grpc v1.27.1
 )
@@ -17,7 +17,7 @@ require (
 require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect
-	github.com/prometheus/client_golang v1.1.0 // indirect
+	github.com/prometheus/client_golang v1.11.1 // indirect
 )
 
 replace (
@@ -58,5 +58,7 @@ replace github.com/envoyproxy/data-plane-api => github.com/projectcalico/data-pl
 replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 
 replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
+
+replace github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.11.1
 
 replace github.com/projectcalico/libcalico-go => ../libcalico-go
