@@ -10,14 +10,13 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/projectcalico/libcalico-go v1.7.2-0.20211119233600-e3f7c620522a
 	github.com/sirupsen/logrus v1.6.0
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
 	google.golang.org/grpc v1.27.1
 )
 
 require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect
-	github.com/prometheus/client_golang v1.11.1 // indirect
 )
 
 replace (
@@ -58,6 +57,8 @@ replace github.com/envoyproxy/data-plane-api => github.com/projectcalico/data-pl
 replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 
 replace github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
+
+replace golang.org/x/crypto => golang.org/x/crypto v0.0.0-20220314234659-1baeb1ce4c0b
 
 replace github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.11.1
 
