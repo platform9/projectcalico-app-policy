@@ -64,4 +64,6 @@ replace github.com/prometheus/client_golang => github.com/prometheus/client_gola
 
 replace golang.org/x/text => golang.org/x/text v0.3.8
 
+replace github.com/satori/go.uuid => github.com/google/uuid v1.3.0
+
 replace github.com/projectcalico/libcalico-go => ../libcalico-go
