@@ -10,7 +10,7 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/projectcalico/libcalico-go v1.7.2-0.20211119233600-e3f7c620522a
 	github.com/sirupsen/logrus v1.6.0
-	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/net v0.7.0
 	google.golang.org/grpc v1.27.1
 )
 
