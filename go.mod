@@ -21,7 +21,6 @@ require (
 
 replace (
 	github.com/Microsoft/hcsshim => github.com/projectcalico/hcsshim v0.8.9-calico
-	//github.com/kelseyhightower/confd => ../confd
 
 	github.com/sirupsen/logrus => github.com/projectcalico/logrus v1.0.4-calico
 
@@ -64,5 +63,6 @@ replace github.com/prometheus/client_golang => github.com/prometheus/client_gola
 
 replace golang.org/x/text => golang.org/x/text v0.3.8
 
-//replace github.com/projectcalico/libcalico-go => ../libcalico-go
+replace github.com/projectcalico/libcalico-go => ../libcalico-go
 
+replace github.com/kelseyhightower/confd => ../confd

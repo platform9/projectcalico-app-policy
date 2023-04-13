@@ -128,7 +128,7 @@ PHONY:local_build
 ifdef LOCAL_BUILD
 EXTRA_DOCKER_ARGS+=-v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw
 local_build:
-	$(DOCKER_RUN) $(CALICO_BUILD) go mod edit -replace=github.com/projectcalico/libcalico-go=../libcalico-go
+	$(DOCKER_RUN) -v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw $(CALICO_BUILD) go mod edit -replace=github.com/projectcalico/libcalico-go=../libcalico-go
 else
 local_build:
 	@echo "Building app-policy"
@@ -240,6 +240,7 @@ bin/dikastes-s390x: ARCH=s390x
 bin/dikastes-%: local_build proto $(SRC_FILES)
 	mkdir -p bin
 	$(DOCKER_RUN_RO) \
+	-v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw \
 	  -v $(CURDIR)/bin:/go/src/$(PACKAGE_NAME)/bin \
 	  $(CALICO_BUILD) go build $(BUILD_FLAGS) -ldflags "-X main.VERSION=$(GIT_VERSION) -s -w" -v -o bin/dikastes-$(ARCH) ./cmd/dikastes
 
@@ -251,6 +252,7 @@ bin/healthz-%: local_build proto $(SRC_FILES)
 	mkdir -p bin || true
 	-mkdir -p .go-pkg-cache $(GOMOD_CACHE) || true
 	$(DOCKER_RUN_RO) \
+	-v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw \
 	  -v $(CURDIR)/bin:/go/src/$(PACKAGE_NAME)/bin \
 	  $(CALICO_BUILD) go build $(BUILD_FLAGS) -ldflags "-X main.VERSION=$(GIT_VERSION) -s -w" -v -o bin/healthz-$(ARCH) ./cmd/healthz
 
@@ -270,6 +272,7 @@ proto: proto/felixbackend.pb.go proto/healthz.proto
 
 proto/felixbackend.pb.go: proto/felixbackend.proto
 	$(DOCKER_RUN_PB) -v $(CURDIR):/src:rw \
+	-v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw \
 		      $(PROTOC_CONTAINER) \
 		      $(PROTOC_IMPORTS) \
 		      proto/*.proto \
@@ -277,6 +280,7 @@ proto/felixbackend.pb.go: proto/felixbackend.proto
 
 proto/healthz.pb.go: proto/healthz.proto
 	$(DOCKER_RUN_PB) -v $(CURDIR):/src:rw \
+	-v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw \
 		      $(PROTOC_CONTAINER) \
 		      $(PROTOC_IMPORTS) \
 		      proto/*.proto \
@@ -356,14 +360,14 @@ sub-tag-images-%:
 .PHONY: static-checks
 LINT_ARGS := --deadline 5m --max-issues-per-linter 0 --max-same-issues 0
 static-checks: build
-	$(DOCKER_RUN) $(CALICO_BUILD) golangci-lint run $(LINT_ARGS)
+	$(DOCKER_RUN) -v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw $(CALICO_BUILD) golangci-lint run $(LINT_ARGS)
 
 .PHONY: fix
 fix:
 	goimports -w $(SRC_FILES)
 
 foss-checks: build-all
-	  $(DOCKER_RUN) -e FOSSA_API_KEY=$(FOSSA_API_KEY) $(CALICO_BUILD) /usr/local/bin/fossa
+	  $(DOCKER_RUN) -v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw -e FOSSA_API_KEY=$(FOSSA_API_KEY) $(CALICO_BUILD) /usr/local/bin/fossa
 
 ###############################################################################
 # UTs
@@ -372,14 +376,14 @@ foss-checks: build-all
 ## Run the tests in a container. Useful for CI, Mac dev
 ut: local_build proto
 	mkdir -p report
-	$(DOCKER_RUN) $(CALICO_BUILD) /bin/bash -c "go test -v $(GINKGO_ARGS) ./... | go-junit-report > ./report/tests.xml"
+	$(DOCKER_RUN) -v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw $(CALICO_BUILD) /bin/bash -c "go test -v $(GINKGO_ARGS) ./... | go-junit-report > ./report/tests.xml"
 
 ###############################################################################
 # CI
 ###############################################################################
 .PHONY: mod-download
 mod-download:
-	-$(DOCKER_RUN) $(CALICO_BUILD) go mod download
+	-$(DOCKER_RUN) -v $(CURDIR)/../libcalico-go:/go/src/github.com/projectcalico/libcalico-go:rw -v $(CURDIR)/../confd:/go/src/github.com/projectcalico/confd:rw $(CALICO_BUILD) go mod download
 
 .PHONY: ci
 ci: clean mod-download build-all static-checks ut
